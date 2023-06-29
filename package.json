@@ -1,0 +1,38 @@
+{
+  "name": "nextjs-demo",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node-dev index.js",
+    "build": "next build",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@next/font": "13.1.6",
+    "@types/node": "18.14.0",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
+    "amqplib": "^0.10.3",
+    "cookie-parser": "^1.4.6",
+    "cron": "^2.2.0",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.8",
+    "eslint": "8.34.0",
+    "eslint-config-next": "13.1.6",
+    "express": "^4.18.2",
+    "mongodb": "^5.0.1",
+    "next": "13.1.6",
+    "node-xlsx": "^0.23.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "request": "^2.88.2",
+    "typescript": "4.9.5",
+    "xlsx-js-style": "^1.2.0",
+    "xlsx-style": "^0.8.13"
+  },
+  "devDependencies": {
+    "node-dev": "^8.0.0",
+    "nodemon": "^2.0.22"
+  }
+}
