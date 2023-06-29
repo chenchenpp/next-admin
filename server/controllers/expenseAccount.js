@@ -19,10 +19,9 @@ module.exports = {
     },
     downloadAccount(req, res) {
         const {body} = req;
-        console.log(body.usr_name, body.usr_id)
         const log = `${new Date().toISOString()}: ${body.usr_name} ${body.usr_id}\n`;
         // 将日志写入文件
-        fs.appendFile('./static/access.log', log, (err) => {
+        fs.appendFile('./log/access.log', log, (err) => {
             if (err) {
                 console.error('Error writing log file:', err);
             }
