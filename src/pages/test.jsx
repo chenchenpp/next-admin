@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
-import Button from "@/components/button";
+import { Button } from "antd";
 import { getWinWidth } from "@/service/win";
 import request from "@/utils/request";
 export default function Test() {
@@ -83,7 +83,7 @@ export default function Test() {
   // 未加载完成不展示页面，缺点是服务端渲染无法处理更多内容
   if (!pageshow) return null;
   return (
-    <div>
+    <div className="p-10">
       <h1>生成报销表格</h1>
       <div style={{ color: "red" }}>
         tip: 目前只支持guest wifi, 如果电脑不能连接此wifi，请使用手机
@@ -91,15 +91,15 @@ export default function Test() {
       <div>
         获取当前登录的用户信息，由于安全问题暂不可使用，需要设置hosts代理：
       </div>
-      <Button onClick={getUserId}>用户信息</Button>
+      <Button type="primary" onClick={getUserId}>用户信息</Button>
 
-      <div>生成报销文件:</div>
+      <div className="mt-10">生成报销文件:</div>
       {showToken && (
         <div>
           <div>填写token: </div>
           <p style={{ color: "red" }}>
             {
-              "登录门户网站后，f11打开控制台 -> Application选项 -> Cookies选项 -> 找到.idc1.fn选项中的s98r5h2s6v1m37o的value填写到输入框中"
+              "登录门户网站后，f12打开控制台 -> Application选项 -> Cookies选项 -> 找到.idc1.fn选项中的s98r5h2s6v1m37o的value填写到输入框中"
             }
           </p>
           <div>
@@ -107,10 +107,9 @@ export default function Test() {
           </div>
         </div>
       )}
+      <Button type="primary" onClick={downloadHandle} className="mr-1">下载报销文件</Button>
 
-      <Button onClick={downloadHandle}>下载报销文件</Button>
-
-      <Button onClick={getFiledDataHandle}>获取文件数据</Button>
+      <Button type="primary" onClick={getFiledDataHandle}>获取文件数据</Button>
       <div>宽度：{window.document.body.offsetWidth}</div>
     </div>
   );

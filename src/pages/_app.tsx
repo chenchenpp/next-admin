@@ -1,6 +1,8 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
+import { Layout, Menu, Button, theme } from 'antd';
 
+import "../styles/index.css";
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
