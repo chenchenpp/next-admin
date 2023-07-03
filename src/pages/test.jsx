@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 import { getWinWidth } from "@/service/win";
 import request from "@/utils/request";
 export default function Test() {
@@ -22,7 +22,8 @@ export default function Test() {
     // init();
   }, []);
   async function getUserId() {
-    let token = userIdRef?.current?.value || '';
+    let token = userIdRef?.current?.input.value || "";
+    console.log(1111, userIdRef);
     const res = await request.get("/getUserId?token=" + token);
     return Promise.resolve(res);
   }
@@ -36,6 +37,7 @@ export default function Test() {
     const userInfoRes = await getUserId();
     const usr_id = userInfoRes.body.res_data.user.usr;
     const usr_name = userInfoRes.body.res_data.user.usr_name;
+    const store_no = userInfoRes.body.res_data.user.store_no;
     let year = dayjs().year();
     let month = dayjs().month() + 1;
     if (month === 1) {
@@ -54,7 +56,8 @@ export default function Test() {
         usr_id,
         sdate,
         edate,
-        usr_name
+        usr_name,
+        store_no,
       },
       "file"
     );
@@ -76,6 +79,11 @@ export default function Test() {
     URL.revokeObjectURL(link.href);
     document.body.removeChild(link);
   }
+
+  async function downloadPdfHandle() {
+    const res = await request.get("/downPdf");
+  }
+
   async function getFiledDataHandle() {
     const res = await request.get("/downExcel");
     console.log(res);
@@ -91,26 +99,36 @@ export default function Test() {
       <div>
         获取当前登录的用户信息，由于安全问题暂不可使用，需要设置hosts代理：
       </div>
-      <Button type="primary" onClick={getUserId}>用户信息</Button>
+      <Button type="primary" onClick={getUserId}>
+        用户信息
+      </Button>
 
       <div className="mt-10">生成报销文件:</div>
       {showToken && (
-        <div>
+        <div className="mt-2">
           <div>填写token: </div>
           <p style={{ color: "red" }}>
             {
               "登录门户网站后，f12打开控制台 -> Application选项 -> Cookies选项 -> 找到.idc1.fn选项中的s98r5h2s6v1m37o的value填写到输入框中"
             }
           </p>
-          <div>
-            token: <input type="text" ref={userIdRef} />
+          <div className="flex items-center pt-2 pb-2">
+            token: <Input type="text" className="w-1/2" ref={userIdRef} />
           </div>
         </div>
       )}
-      <Button type="primary" onClick={downloadHandle} className="mr-1">下载报销文件</Button>
+      <Button type="primary" onClick={downloadHandle} className="mr-1">
+        下载报销excel文件
+      </Button>
 
-      <Button type="primary" onClick={getFiledDataHandle}>获取文件数据</Button>
-      <div>宽度：{window.document.body.offsetWidth}</div>
+      {/* <Button type="primary" onClick={downloadPdfHandle} className="mr-1">
+        下载报销pdf文件
+      </Button> */}
+
+      <Button type="primary" onClick={getFiledDataHandle}>
+        获取文件数据
+      </Button>
+      {/* <div>宽度：{window.document.body.offsetWidth}</div> */}
     </div>
   );
 }

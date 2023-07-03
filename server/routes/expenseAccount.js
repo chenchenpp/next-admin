@@ -2,7 +2,7 @@
  * @Author: peng.chen2
  * @Date: 2023-06-29 10:17:55
  * @LastEditors: peng.chen2
- * @LastEditTime: 2023-06-29 16:05:19
+ * @LastEditTime: 2023-07-03 16:50:44
  * @FilePath: /micro-web/Users/chenpeng/Desktop/myProject/person/nextjs-demo-main/server/routes/expenseAccount.js
  * @Description: 报销单
  * @use:
@@ -21,6 +21,8 @@ const router = express.Router();
 router.get('/downExcel', expenseAccountCtr.getExcelModelData)
 
 router.post("/downExcel", expenseAccountCtr.downloadAccount)
+
+// router.get("/downPdf", expenseAccountCtr.downloadPdf)
 
 module.exports = router;
 
