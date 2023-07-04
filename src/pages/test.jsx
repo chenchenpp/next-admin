@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from 'next/router'
 import dayjs from "dayjs";
 import { Button, Input } from "antd";
 import { getWinWidth } from "@/service/win";
@@ -8,6 +9,7 @@ export default function Test() {
   const [pageshow, setPageShow] = useState(false);
   const [showToken, setShowToken] = useState(false);
   const userIdRef = useRef();
+  const router = useRouter();
   const wid = getWinWidth();
 
   useEffect(() => {
@@ -28,7 +30,8 @@ export default function Test() {
     return Promise.resolve(res);
   }
   async function downloadHandle() {
-    if (showToken && !userIdRef.current.value) {
+    let token = userIdRef?.current?.input.value || "";
+    if (showToken && !token) {
       alert(
         "token不能为空: 登录门户网站后，f11打开控制台 -> Application选项 -> Cookies选项 -> 找到.idc1.fn选项中的s98r5h2s6v1m37o的value填写到输入框中"
       );
@@ -88,6 +91,9 @@ export default function Test() {
     const res = await request.get("/downExcel");
     console.log(res);
   }
+  function goLoginHandle() {
+    router.push('/login')
+  }
   // 未加载完成不展示页面，缺点是服务端渲染无法处理更多内容
   if (!pageshow) return null;
   return (
@@ -128,6 +134,7 @@ export default function Test() {
       <Button type="primary" onClick={getFiledDataHandle}>
         获取文件数据
       </Button>
+      <Button onClick={goLoginHandle}>登录页面</Button>
       {/* <div>宽度：{window.document.body.offsetWidth}</div> */}
     </div>
   );

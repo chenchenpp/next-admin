@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 // require("./message");
 const user = require('./routes/user')
 const expenseAccount = require('./routes/expenseAccount')
+const cors = require('cors');
 
 const server = express();
 const port = parseInt(process.env.PORT, 10) || 8082;
@@ -15,12 +16,12 @@ const handle = app.getRequestHandler();
 
 // 设置head标头
 server.set("x-powered-by", dev);
-
 // 初始化Nextjs
 app
   .prepare()
   .then(() => {
     //自定义api
+    server.use(cors());
     server.use(bodyParser.json());
     server.use(cookieParser());
     server.use(user);

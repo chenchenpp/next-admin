@@ -12,14 +12,14 @@ const XLSX = require('../../libs/xlsx-style/xlsx');
 // TODO 能狗获取到行高 !rows, 但是失去了写入样式能力
 const XLSX2= require('xlsx-js-style');
 
-const FEINIU_XLSL_MODULE =  path.join(__dirname, '../../static/feiniu.xlsx');
-const XLSX_DATA =  path.join(__dirname, '../../static/excel名称.xlsx');
+const FEINIU_XLSL_MODULE =  path.join(__dirname, '../../public/static/feiniu.xlsx');
+const XLSX_DATA =  path.join(__dirname, '../../public/static/excel名称.xlsx');
 
 module.exports = {
     getExcelModelData(req, res) {
         var workbook2 = XLSX.readFile(FEINIU_XLSL_MODULE, {cellStyles: true, cellDates: true,});
         var workbook3 = XLSX2.readFile(FEINIU_XLSL_MODULE, {cellStyles: true});
-        var workbook4 = XLSX.readFile('./static/excel名称.xlsx', {cellStyles: true, cellDates: true,})
+        var workbook4 = XLSX.readFile('./public/static/excel名称.xlsx', {cellStyles: true, cellDates: true,})
         res.send({
             workbook2,
             workbook3,
@@ -29,12 +29,14 @@ module.exports = {
     downloadAccount(req, res) {
         const {body} = req;
         const log = `${new Date().toISOString()}: ${body.usr_name} ${body.usr_id}\n`;
-        // 将日志写入文件
+        
+         // 将日志写入文件
         fs.appendFile('./log/access.log', log, (err) => {
             if (err) {
                 console.error('Error writing log file:', err);
             }
         });
+
         request({
             url: 'http://oa-portal.idc1.fn/api/attendance/get-list',
             method:'POST',
@@ -45,10 +47,11 @@ module.exports = {
             body
         }, function(error, response, logListBody) {    
             if (error || res.statusCode !== 200) {
-                res.send({
-                    code: res.statusCode || 500,
-                    msg: '接口异常：请检查!' + error
-                })
+              res.status(401).send({
+                code: res.statusCode || 500,
+                msg: '接口异常：请检查!' + error
+              })
+              return
             }
             // 筛选大于晚上七点的上班记录
             const expenseList = logListBody.body.filter(item => Number(item.end.split(':')[0]) >= 19)
@@ -82,6 +85,12 @@ module.exports = {
             worksheet.D29.v = sumPrice;
             // 餐饮发票
             worksheet.B30.v = `餐饮发票：${sumPrice}`;
+
+            worksheet.B31.v = '交通发票：0';
+
+            worksheet.B32.v = sumPrice;
+            // 车票报销
+            worksheet.E28.v = '';
 
             worksheet.A35.v = `申请人签名：_____${expenseList[0].usr_name}______  直属主管签名：__________  部门主管签名：__________`;
             
@@ -159,7 +168,7 @@ module.exports = {
              * @说明 将文件处理成binary后；需要转换成buffer，前端需要转换成blob
              */
             // 写入文件
-            XLSX.writeFile(workbook, './static/excel名称.xlsx', {type: "binary", bookType: "xlsx", cellStyles: true});
+            XLSX.writeFile(workbook, './public/static/excel名称.xlsx', {type: "binary", bookType: "xlsx", cellStyles: true});
             // 读取文件
             var wbout = XLSX.write(workbook, {type: "buffer", bookType: "xlsx", cellStyles: true});
             
@@ -167,11 +176,9 @@ module.exports = {
         }) 
     },
     downloadPdf(req, res) {
-      console.log(11111)
-
       var workbook = new aspose.cells.Workbook(XLSX_DATA);
       var saveOptions = aspose.cells.PdfSaveOptions();
       saveOptions.setOnePagePerSheet(true);
-      workbook.save("./static/报销单.pdf", saveOptions);
+      workbook.save("./public/static/报销单.pdf", saveOptions);
     }
 }
