@@ -1,6 +1,6 @@
 import Head from "next/head";
 import type { AppProps } from "next/app";
-import { Layout, Menu, Button, theme } from 'antd';
+import PageLayout from "@/components/Layout";
 
 import "../styles/index.css";
 export default function App({ Component, pageProps }: AppProps) {
@@ -12,7 +12,9 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
         ></meta>
       </Head>
-      <Component {...pageProps} />
+      <PageLayout>
+        <Component {...pageProps} />
+      </PageLayout>
     </>
   );
 }

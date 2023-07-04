@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const { SERVER_ENV } = process.env;
+const withLess = require("next-with-less");
 
 const nextConfig = {
   experimental: {
@@ -26,4 +27,5 @@ const nextConfig = {
   }
 };
 
-module.exports = nextConfig;
+
+module.exports = withLess(nextConfig);
