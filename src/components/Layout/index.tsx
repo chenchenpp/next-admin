@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Button, theme } from "antd";
 // todo: 图标ts报错，缺少rev属性，需要保持react与types/react保持一致是因为https://github.com/ant-design/ant-design/issues/43247
 import {
@@ -23,28 +23,29 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
       icon: <DownloadOutlined />,
       label: "加班报销",
     },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "nav 2",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "nav 3",
-    },
   ];
+  const [pageshow, setPageShow] = useState(false);
+
+  useEffect(() => {
+    //设置页面加载完成
+    setPageShow(true);
+    // init();
+  }, []);
+  if (!pageshow) return null;
   return (
     <Layout className={Styles.layoutContainer}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={menuData}
-        />
-      </Sider>
+      {window.document.body.offsetWidth > 1200 && (
+        <Sider trigger={null} collapsible collapsed={collapsed}>
+          <div className="demo-logo-vertical" />
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            items={menuData}
+          />
+        </Sider>
+      )}
+
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
