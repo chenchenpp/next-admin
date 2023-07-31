@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 // require("./task");
 // require("./message");
+const login = require('./routes/login')
 const user = require('./routes/user')
 const expenseAccount = require('./routes/expenseAccount')
 const cors = require('cors');
@@ -24,6 +25,7 @@ app
     server.use(cors());
     server.use(bodyParser.json());
     server.use(cookieParser());
+    server.use(login);
     server.use(user);
     server.use(expenseAccount);
 

@@ -1,7 +1,11 @@
 class request {
-    async init(url, data, type, reqExtend) {
+    async init(url, data, type, body) {
+        // formData处理
+        if(type === 'formData') {
+            body.headers['Content-Type'] = 'multipart/form-data'
+        }
         const reqBody = {
-            ...reqExtend,
+            ...body,
             body: JSON.stringify(data)
         }
         const response = await fetch(url, reqBody)

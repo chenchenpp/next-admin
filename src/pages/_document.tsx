@@ -18,6 +18,10 @@ export default function mDocument() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <body>
+        <script
+          src="https://g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"
+          async
+        ></script>
         <Main />
         <NextScript />
         <script

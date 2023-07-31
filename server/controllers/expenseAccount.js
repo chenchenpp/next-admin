@@ -5,7 +5,6 @@ const path = require('path')
 // const Excel = require('exceljs');
 // var aspose = aspose || {};
 // aspose.cells = require("aspose.cells");
-
 // !TODO xlsx-style能够获取样式，但是不能获取行高
 const XLSX = require('../../libs/xlsx-style/xlsx');
 
@@ -17,6 +16,7 @@ const XLSX_DATA =  path.join(__dirname, '../../public/static/excel名称.xlsx');
 
 module.exports = {
     getExcelModelData(req, res) {
+      
         var workbook2 = XLSX.readFile(FEINIU_XLSL_MODULE, {cellStyles: true, cellDates: true,});
         var workbook3 = XLSX2.readFile(FEINIU_XLSL_MODULE, {cellStyles: true});
         var workbook4 = XLSX.readFile('./public/static/excel名称.xlsx', {cellStyles: true, cellDates: true,})

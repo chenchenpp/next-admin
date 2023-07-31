@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu, Button, theme } from "antd";
 // todo: 图标ts报错，缺少rev属性，需要保持react与types/react保持一致是因为https://github.com/ant-design/ant-design/issues/43247
 import {
+  GithubOutlined,
   DownloadOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,25 +11,38 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import Styles from "./index.module.less";
+import Link from "next/link";
 
 const { Header, Sider, Content } = Layout;
 const PageLayout: React.FC<{ children: any }> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const menuData = [
     {
-      key: "1",
-      icon: <DownloadOutlined />,
-      label: "加班报销",
+      key: "/",
+      icon: <GithubOutlined />,
+      label: <Link href="/">工作台</Link>,
     },
+    {
+      key: "/reimburse",
+      icon: <DownloadOutlined />,
+      label: <Link href="/reimburse">加班报销</Link>,
+    },{
+      key: '/upload',
+      icon: <UploadOutlined />,
+      label: <Link href="/upload">文件上传</Link>,
+    }
   ];
   const [pageshow, setPageShow] = useState(false);
 
   useEffect(() => {
     //设置页面加载完成
     setPageShow(true);
+    const { pathname } = location;
+    setActiveKeys([pathname])
     // init();
   }, []);
   if (!pageshow) return null;
@@ -40,7 +54,7 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={activeKeys}
             items={menuData}
           />
         </Sider>
