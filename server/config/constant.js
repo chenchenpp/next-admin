@@ -1,8 +1,8 @@
-const WX_APPID = 'wx594d896414585fca'
+const WX_APPID = ''
 const GRANT_TYPE = 'client_credential' 
-const APP_SECRET = 'ecc88742a3d33c6ea643594ec876568d'
+const APP_SECRET = ''
 
-const DD_AppKey = 'dingrxmfuyclkd7vernd'
+const DD_AppKey = ''
 const DD_AppSecret = 'evuxjPKOJ0PvTW9t7oVXkt_F1HFhtAFjfpa816m9w0IjgyeC9d3YjHAeVAUbKIK5'
 
 const wx_accessTokenApi = `https://api.weixin.qq.com/cgi-bin/token?grant_type=${GRANT_TYPE}&appid=${WX_APPID}&secret=${APP_SECRET}`
