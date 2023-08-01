@@ -1,12 +1,16 @@
 class request {
     async init(url, data, type, body) {
-        // formData处理
-        if(type === 'formData') {
-            body.headers['Content-Type'] = 'multipart/form-data'
-        }
-        const reqBody = {
-            ...body,
-            body: JSON.stringify(data)
+        let reqBody = body;
+        // 使用fetch上传formData则不需要设置content-type
+        if(type == 'formData') {
+            Object.assign(reqBody, {
+                body: data
+            })
+        } else {
+            Object.assign(reqBody, {
+                body: JSON.stringify(data)
+            })
+            reqBody.headers['Content-Type'] = 'application/json'
         }
         const response = await fetch(url, reqBody)
         // 未登录
@@ -28,24 +32,29 @@ class request {
         return response.json();
     }
     async post(url, data, type, reqExtend = {}) {
-        const body = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            ...reqExtend
-        }
-        return await this.init(url, data, type, body)
+        reqExtend.method = 'POST'
+        // const body = {
+        //     method: 'POST',
+        //     ...reqExtend
+        // }
+        //  // formData处理
+        // if(type !== 'formData') {
+        //     body.headers = {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }
+        return await this.init(url, data, type, reqExtend)
     }
     async get(url, data, type, reqExtend = {}) {
-        const body = {
-            method: 'Get',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            ...reqExtend
-        }
-        return await this.init(url, data, type, body)
+        reqExtend.method = 'Get'
+        // const body = {
+        //     method: 'Get',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     ...reqExtend
+        // }
+        return await this.init(url, data, type, reqExtend)
     }
 }
 export default new request();

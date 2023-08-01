@@ -28,7 +28,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
     }
    ```
    这个配置相当于把@tailwind base的默认样式屏蔽掉，从源码中找到node_modules/tailwindcss/lib/css/preflight.css文件，会发现还初始化了其他标签的默认样式，所以综上解决：先配置属性屏蔽base使用，将preflight文件拿出来配置到样式中。
-
+2. Parsing error : Cannot find module 'next/babel':
+  解决方式：https://stackoverflow.com/questions/68163385/parsing-error-cannot-find-module-next-babel
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

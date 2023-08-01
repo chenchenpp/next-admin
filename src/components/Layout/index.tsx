@@ -30,11 +30,12 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
       key: "/reimburse",
       icon: <DownloadOutlined />,
       label: <Link href="/reimburse">加班报销</Link>,
-    },{
-      key: '/upload',
+    },
+    {
+      key: "/upload",
       icon: <UploadOutlined />,
       label: <Link href="/upload">文件上传</Link>,
-    }
+    },
   ];
   const [pageshow, setPageShow] = useState(false);
 
@@ -42,12 +43,13 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
     //设置页面加载完成
     setPageShow(true);
     const { pathname } = location;
-    setActiveKeys([pathname])
+    setActiveKeys([pathname]);
     // init();
   }, []);
   if (!pageshow) return null;
   return (
     <Layout className={Styles.layoutContainer}>
+      {/* 兼容移动端 */}
       {window.document.body.offsetWidth > 1200 && (
         <Sider trigger={null} collapsible collapsed={collapsed}>
           <div className="demo-logo-vertical" />
@@ -60,7 +62,7 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
         </Sider>
       )}
 
-      <Layout>
+      <Layout className={Styles.layoutRight}>
         <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
@@ -83,9 +85,9 @@ const PageLayout: React.FC<{ children: any }> = ({ children }) => {
           style={{
             margin: "24px 16px",
             padding: 24,
-            minHeight: 280,
             background: colorBgContainer,
           }}
+          className={Styles.pageMain}
         >
           {children}
         </Content>

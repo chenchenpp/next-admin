@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 // require("./message");
 const login = require('./routes/login')
 const user = require('./routes/user')
+const upload = require('./routes/upload')
 const expenseAccount = require('./routes/expenseAccount')
 const cors = require('cors');
 
@@ -25,8 +26,9 @@ app
     server.use(cors());
     server.use(bodyParser.json());
     server.use(cookieParser());
-    server.use(login);
-    server.use(user);
+
+    server.use(login).use(user).use(upload);
+    
     server.use(expenseAccount);
 
     // 自定义渲染内容

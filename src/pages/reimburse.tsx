@@ -25,7 +25,6 @@ export default function Test() {
   }, []);
   async function getUserId() {
     let token = userIdRef?.current?.input?.value || "";
-    console.log(1111, userIdRef);
     const res = await request.get("/getUserId?token=" + token);
     return Promise.resolve(res);
   }
