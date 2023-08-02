@@ -24,7 +24,10 @@ app
   .then(() => {
     //自定义api
     server.use(cors());
-    server.use(bodyParser.json());
+    server.use(bodyParser.json({
+      limit: "10mb", 
+      extended: true
+    }));
     server.use(cookieParser());
 
     server.use(login).use(user).use(upload);

@@ -4,7 +4,7 @@ import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/li
 import { useState } from "react";
 import Image from "next/image";
 import type { UploadFile } from "antd/es/upload/interface";
-
+import { getFileBase64Handle } from "@/utils/utils";
 export default function UploadPage() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
@@ -12,6 +12,7 @@ export default function UploadPage() {
 
   const [formDataImg, setFormDataImg] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [base64FileList, setBase64FileList] = useState<UploadFile[]>([]);
   async function singleUploadFormData(options: RcCustomRequestOptions) {
     const { file } = options;
     let formData = new FormData();
@@ -26,6 +27,18 @@ export default function UploadPage() {
       console.log(body);
       fileList.push(body);
       setFileList([...fileList]);
+    }
+  }
+  async function base64UploadHandle(options: RcCustomRequestOptions) {
+    const { file } = options;
+    const base64Data = await getFileBase64Handle(file);
+    const { code, body, msg } = await request.post("/upload_base64", {
+      imgData: base64Data,
+    });
+    if (code === "200") {
+      console.log(body);
+      base64FileList.push(body);
+      setBase64FileList([...base64FileList]);
     }
   }
   const handleCancel = () => setPreviewOpen(false);
@@ -77,7 +90,16 @@ export default function UploadPage() {
         <Col xl={6} sm={24} md={12} lg={8}>
           <Card title="单一文件上传-base64">
             <div>
-              <Button type="primary">上传文件</Button>
+              <Upload
+                accept="image/png, image/jpeg, image/jpg"
+                listType="picture-card"
+                customRequest={base64UploadHandle}
+                fileList={base64FileList}
+                onPreview={handlePreview}
+                onRemove={removeFileHandle}
+              >
+                <Button type="primary">上传文件</Button>
+              </Upload>
             </div>
             <p className="mt-10">
               只能上传png/jpg/jpeg格式图片，且大小不超过2MB
