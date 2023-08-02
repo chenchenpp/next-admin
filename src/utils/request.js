@@ -10,6 +10,9 @@ class request {
             Object.assign(reqBody, {
                 body: JSON.stringify(data)
             })
+            if(!reqBody.headers) {
+                reqBody.headers = {}
+            }
             reqBody.headers['Content-Type'] = 'application/json'
         }
         const response = await fetch(url, reqBody)

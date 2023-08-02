@@ -53,8 +53,12 @@ module.exports = {
               })
               return
             }
-            // 筛选大于晚上七点的上班记录
-            const expenseList = logListBody.body.filter(item => Number(item.end.split(':')[0]) >= 19)
+            // 筛选大于晚上七点并且满9个小时的上班记录 和 周末加班
+            const expenseList = logListBody.body.filter(item => {
+              const workDayOver = Number(item.end.split(':')[0]) >= 19 && Number(item.hour) > 9 && item.is_workday
+              const weekendFlag = !item.is_workday
+              return workDayOver || weekendFlag
+            })
             
             // 休息日获取
             const weekendList = expenseList.filter(item => [0, 6].includes(dayjs(item.day).day()));
@@ -119,6 +123,14 @@ module.exports = {
                       v: `17:30 ~ ${item[name]}`,
                       r: `<t>17:30~${item[name]}</t>`,
                       w: `17:30 ~ ${item[name]}`,
+                      t: "s"
+                    } 
+                  } else if(name === 'overtime_reason'){
+                    data[Map[name] + lines]={
+                      h: item[name] || '',
+                      v: item[name] || '',
+                      r: item[name] || '',
+                      w: item[name] || '',
                       t: "s"
                     } 
                   } else if(name === 'price') {
