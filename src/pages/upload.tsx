@@ -1,10 +1,12 @@
 import { Button, Card, Col, Modal, Row, Upload } from "antd";
 import request from "@/utils/request";
-import type { UploadRequestOption as RcCustomRequestOptions } from "rc-upload/lib/interface";
+import type { UploadRequestOption as RcCustomRequestOptions, RcFile } from "rc-upload/lib/interface";
 import { useState } from "react";
 import Image from "next/image";
 import type { UploadFile } from "antd/es/upload/interface";
 import { getFileBase64Handle } from "@/utils/utils";
+import axios from "axios";
+
 export default function UploadPage() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
@@ -13,6 +15,7 @@ export default function UploadPage() {
   const [formDataImg, setFormDataImg] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [base64FileList, setBase64FileList] = useState<UploadFile[]>([]);
+  const [progressFileList, setProgressFileList] = useState<UploadFile[]>([]);
   async function singleUploadFormData(options: RcCustomRequestOptions) {
     const { file } = options;
     let formData = new FormData();
@@ -40,6 +43,47 @@ export default function UploadPage() {
       base64FileList.push(body);
       setBase64FileList([...base64FileList]);
     }
+  }
+
+  async function progressUploadHandle(options: RcCustomRequestOptions) {
+    const file = options.file as RcFile;
+    let formData = new FormData();
+    formData.append("file", file);
+    formData.append("filename", file.name);
+    const index = progressFileList.length;
+    progressFileList.push({
+      name: file.name,
+      uid: file.uid,
+      status: "uploading"
+    });
+    setProgressFileList([...progressFileList]);
+    //请求本地服务
+    axios
+      .post("/upload_single", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+        onUploadProgress: (progress) => {
+          let { loaded } = progress;
+          let uploadPercent = ((loaded / file.size) * 100).toFixed(2);
+          const copyProgressFileList = JSON.parse(
+            JSON.stringify(progressFileList)
+          );
+          copyProgressFileList[index].percent = uploadPercent;
+          setProgressFileList(copyProgressFileList);
+        },
+      })
+      .then((res: any) => {
+        const { code, body, msg } = res.data;
+        if (code === "200") {
+          const copyProgressFileList = JSON.parse(
+            JSON.stringify(progressFileList)
+          );
+          copyProgressFileList[index].status = "done";
+          copyProgressFileList[index].url = body.url;
+          delete copyProgressFileList[index].percent;
+          setProgressFileList(copyProgressFileList);
+        }
+      });
   }
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file: UploadFile) => {
@@ -109,7 +153,16 @@ export default function UploadPage() {
         <Col xl={6} sm={24} md={12} lg={8}>
           <Card title="单一文件上传-进度管控">
             <div>
-              <Button type="primary">上传文件</Button>
+              <Upload
+                accept="image/png, image/jpeg, image/jpg"
+                listType="picture-card"
+                customRequest={progressUploadHandle}
+                fileList={progressFileList}
+                onPreview={handlePreview}
+                onRemove={removeFileHandle}
+              >
+                <Button type="primary">上传文件</Button>
+              </Upload>
             </div>
           </Card>
         </Col>
