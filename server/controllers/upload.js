@@ -45,5 +45,36 @@ module.exports = {
               })
            }
          })
+    },
+    async largeUpload(req, res){
+        const {name, size, type, offset, hash} = req.body;
+        const {file} = req.files;
+        const ext = path.extname(name)
+        console.log(name, size, type, offset, hash, ext)
+        const filename = path.join(__dirname, `../../public/large/${hash}${ext}`)
+        // 如果之前已经添加过
+        if(offset > 0) {
+            if(!fs.existsSync(filename)){
+                res.status(400).send({
+                    code: '400',
+                    msg: '文件不存在'
+                })
+                return;
+            }
+            // 向文件中添加数据
+            await fs.appendFileSync(filename, file.data);
+            res.send({
+                code: '200',
+                data: '添加完毕'
+            })
+            return
+        }
+        // 第一次添加处理
+        await fs.writeFileSync(filename, file.data);
+        res.send({
+            code: '200',
+            data: '创建成功'
+        })
     }
+
 }

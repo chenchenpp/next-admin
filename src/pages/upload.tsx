@@ -1,12 +1,15 @@
 import { Button, Card, Col, Modal, Row, Upload } from "antd";
 import request from "@/utils/request";
-import type { UploadRequestOption as RcCustomRequestOptions, RcFile } from "rc-upload/lib/interface";
+import type {
+  UploadRequestOption as RcCustomRequestOptions,
+  RcFile,
+} from "rc-upload/lib/interface";
 import { useState } from "react";
 import Image from "next/image";
 import type { UploadFile } from "antd/es/upload/interface";
 import { getFileBase64Handle } from "@/utils/utils";
 import axios from "axios";
-
+import LargeUpload from "@/components/Upload/LargeUpload";
 export default function UploadPage() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("");
@@ -17,6 +20,7 @@ export default function UploadPage() {
   const [base64FileList, setBase64FileList] = useState<UploadFile[]>([]);
   const [progressFileList, setProgressFileList] = useState<UploadFile[]>([]);
   async function singleUploadFormData(options: RcCustomRequestOptions) {
+    console.log(options, 1111);
     const { file } = options;
     let formData = new FormData();
     formData.append("file", file);
@@ -54,7 +58,7 @@ export default function UploadPage() {
     progressFileList.push({
       name: file.name,
       uid: file.uid,
-      status: "uploading"
+      status: "uploading",
     });
     setProgressFileList([...progressFileList]);
     //请求本地服务
@@ -177,7 +181,7 @@ export default function UploadPage() {
         <Col xl={6} sm={24} md={12} lg={8}>
           <Card title="大文件上传">
             <div>
-              <Button type="primary">上传图片</Button>
+              <LargeUpload></LargeUpload>
             </div>
           </Card>
         </Col>
