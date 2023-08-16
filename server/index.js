@@ -1,7 +1,10 @@
 const express = require("express");
 const next = require("next");
+// todo express4.x及以上版本已经不需要安装body-parser中间件去获取post请求的请求体了，且已经被弃用，只需写入以上配置即可获取post请求体。
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+const fileUpload = require('express-fileupload');
+
 // require("./task");
 // require("./message");
 const login = require('./routes/login')
@@ -29,6 +32,7 @@ app
       extended: true
     }));
     server.use(cookieParser());
+    server.use(fileUpload());
 
     server.use(login).use(user).use(upload);
     
