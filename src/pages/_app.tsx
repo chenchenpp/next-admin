@@ -1,16 +1,20 @@
+import App, { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
-import type { AppProps } from "next/app";
-import Script from 'next/script'
+import Script from "next/script";
 import { Inter, Roboto } from "@next/font/google";
 import PageLayout from "@/components/Layout";
 
 const inter = Inter({ subsets: ["latin"] });
 const roboto = Roboto({
-  weight: '700',
-  subsets: ['latin'],
-})
+  weight: "700",
+  subsets: ["latin"],
+});
 import "../styles/index.css";
-export default function App({ Component, pageProps }: AppProps) {
+export default function MyApp({
+  Component,
+  pageProps,
+  type,
+}: AppProps & { type: string }) {
   return (
     <>
       <Head>
@@ -21,10 +25,25 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <Script src="https://example.com/script.js" />
       <main className={inter.className}>
-        <PageLayout>
+        {type === "layout" ? (
+          <PageLayout>
+            <Component {...pageProps} />
+          </PageLayout>
+        ) : (
           <Component {...pageProps} />
-        </PageLayout>
+        )}
       </main>
     </>
   );
 }
+MyApp.getInitialProps = async (
+  context: AppContext
+): Promise<AppInitialProps & { type: string }> => {
+  const ctx = await App.getInitialProps(context);
+  const { route } = context.router;
+  let type = "layout";
+  if (route === "/login") {
+    type = "noLayout";
+  }
+  return { ...ctx, type };
+};

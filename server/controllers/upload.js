@@ -46,11 +46,12 @@ module.exports = {
            }
          })
     },
+
+    /** 大文件上传 */
     async largeUpload(req, res){
         const {name, size, type, offset, hash} = req.body;
         const {file} = req.files;
         const ext = path.extname(name)
-        console.log(name, size, type, offset, hash, ext)
         const filename = path.join(__dirname, `../../public/large/${hash}${ext}`)
         // 如果之前已经添加过
         if(offset > 0) {

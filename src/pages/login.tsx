@@ -10,8 +10,12 @@ export default function Login() {
   useEffect(() => {
     setPageShow(true);
   }, []);
-  useLayoutEffect(() => {
-    console.log(document.getElementById("login_container"), 1111);
+  /**
+   * 获取二维码
+   * todo Next.js: document is not defined : 
+   * https://stackoverflow.com/questions/60629258/next-js-document-is-not-defined
+   */
+  useEffect(() => {
     if (DDLogin && document.getElementById("login_container")) {
       DDLogin({
         id: "login_container", //这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
@@ -22,7 +26,7 @@ export default function Login() {
       });
       loginMessageHandle();
     }
-  }, [document.getElementById("login_container")]);
+  }, [pageshow]);
   async function getAccessToken() {
     const res = await request.get("/getAccessToken");
   }
@@ -32,9 +36,8 @@ export default function Login() {
     });
     console.log(res, "res");
   }
-
-  // 未加载完成不展示页面，缺点是服务端渲染无法处理更多内容
   if (!pageshow) return null;
+
   return (
     <div className="p-10">
       <div id="login_container"></div>

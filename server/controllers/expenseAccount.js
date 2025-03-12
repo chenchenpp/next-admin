@@ -28,6 +28,7 @@ module.exports = {
     },
     downloadAccount(req, res) {
         const {body} = req;
+        console.log(body, 'body')
         const log = `${new Date().toISOString()}: ${body.usr_name} ${body.usr_id}\n`;
         
          // 将日志写入文件
@@ -183,7 +184,7 @@ module.exports = {
             XLSX.writeFile(workbook, './public/static/excel名称.xlsx', {type: "binary", bookType: "xlsx", cellStyles: true});
             // 读取文件
             var wbout = XLSX.write(workbook, {type: "buffer", bookType: "xlsx", cellStyles: true});
-            
+            console.log(wbout, 'wboutwbout')
             res.send(wbout) 
         }) 
     },
